@@ -3,7 +3,10 @@ package com.excler.StudentInfo.service;
 import com.excler.StudentInfo.model.Student;
 import com.excler.StudentInfo.repository.Studentrepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.excler.StudentInfo.model.UserInfo;
+import com.excler.StudentInfo.repository.UserInfoRepository;
 
 import java.util.List;
 
@@ -11,6 +14,11 @@ import java.util.List;
 public class Studentservice {
     @Autowired
     private Studentrepository repo;
+    @Autowired
+    private UserInfoRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     public Student addStudent(Student student) {
         return repo.save(student);
     }
@@ -39,5 +47,10 @@ public class Studentservice {
         existingStudent.setAddress(student.getAddress());
         repo.save(existingStudent);
         return student;
+    }
+    public String addUser(UserInfo userInfo) {
+        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+        repository.save(userInfo);
+        return "user added to system ";
     }
 }
